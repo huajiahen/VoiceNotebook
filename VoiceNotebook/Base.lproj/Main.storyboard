@@ -34,24 +34,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y95-lj-yZL">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y95-lj-yZL">
                                 <rect key="frame" x="200" y="137" width="200" height="200"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="Lrk-fD-cTN"/>
                                     <constraint firstAttribute="width" constant="200" id="Lzm-Wv-l84"/>
                                 </constraints>
-                                <state key="normal" title="Record"/>
+                                <state key="normal" title="Record" backgroundImage="RecordIcon"/>
                                 <connections>
                                     <action selector="endRecord" destination="TOk-Gx-b70" eventType="touchUpInside" id="NSu-xE-9Ug"/>
                                     <action selector="endRecord" destination="TOk-Gx-b70" eventType="touchUpOutside" id="kSb-2k-130"/>
                                     <action selector="startRecord" destination="TOk-Gx-b70" eventType="touchDown" id="Cb0-bb-30b"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0d1-Qx-6o2">
-                                <rect key="frame" x="285" y="452" width="30" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0d1-Qx-6o2">
+                                <rect key="frame" x="236" y="402" width="128" height="128"/>
                                 <animations/>
-                                <state key="normal" title="Play"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="128" id="QIk-hc-xma"/>
+                                    <constraint firstAttribute="height" constant="128" id="y8L-C6-byT"/>
+                                </constraints>
+                                <state key="normal" image="PlayIcon"/>
                                 <connections>
                                     <action selector="play" destination="TOk-Gx-b70" eventType="touchUpInside" id="RTD-eW-bY2"/>
                                 </connections>
@@ -61,13 +65,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="y95-lj-yZL" firstAttribute="centerX" secondItem="xv3-cT-1It" secondAttribute="centerX" id="GKu-O5-5B8"/>
+                            <constraint firstItem="kvS-2b-TdE" firstAttribute="top" secondItem="0d1-Qx-6o2" secondAttribute="bottom" constant="70" id="GXA-Am-jPx"/>
                             <constraint firstItem="0d1-Qx-6o2" firstAttribute="centerX" secondItem="y95-lj-yZL" secondAttribute="centerX" id="WF0-T2-VNU"/>
                             <constraint firstItem="y95-lj-yZL" firstAttribute="top" secondItem="bab-Id-nLu" secondAttribute="bottom" constant="73" id="WwW-lp-xvT"/>
-                            <constraint firstItem="0d1-Qx-6o2" firstAttribute="top" secondItem="y95-lj-yZL" secondAttribute="bottom" constant="115" id="XcR-HZ-hMd"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Vt5-Xr-lkl">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="Jj7-4h-4gr">
+                        <barButtonItem key="rightBarButtonItem" title="Memo List" id="Jj7-4h-4gr">
                             <connections>
                                 <segue destination="QdT-32-VTF" kind="show" id="hG7-Vw-Dxd"/>
                             </connections>
@@ -82,17 +86,17 @@
             </objects>
             <point key="canvasLocation" x="74" y="109"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Memo List View Controller-->
         <scene sceneID="Cge-64-Xrg">
             <objects>
-                <tableViewController id="QdT-32-VTF" sceneMemberID="viewController">
+                <tableViewController id="QdT-32-VTF" customClass="MemoListViewController" customModule="VoiceNotebook" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xhr-uc-1X6">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="Zjt-Fb-0d0" detailTextLabel="6BV-M8-Zwz" style="IBUITableViewCellStyleValue1" id="TCJ-S6-MEN">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MemoCell" textLabel="Zjt-Fb-0d0" detailTextLabel="6BV-M8-Zwz" style="IBUITableViewCellStyleValue1" id="TCJ-S6-MEN">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TCJ-S6-MEN" id="hIo-OC-TX2">
@@ -132,4 +136,8 @@
             <point key="canvasLocation" x="852" y="109"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="PlayIcon" width="128" height="128"/>
+        <image name="RecordIcon" width="128" height="128"/>
+    </resources>
 </document>

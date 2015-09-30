@@ -16,21 +16,20 @@ class RecordViewController: UIViewController {
     var recorder: AVAudioRecorder?
     var player: AVAudioPlayer?
     
-    override func viewWillAppear(animated: Bool) {
-        recordButton.backgroundColor = UIColor.redColor()
-        recordButton.setTitle("Record", forState: .Normal)
-        recordButton.setTitle("Recording", forState: .Highlighted)
-
-        playButton.backgroundColor = UIColor.greenColor()
-        playButton.setTitle("Play", forState: .Normal)
-        playButton.setTitle("Stop", forState: .Selected)
-
+    override func viewDidLoad() {
+        playButton.hidden = true
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        player?.stop()
+        playButton.selected = false
+    }
+    
     
     @IBAction func startRecord() {
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try audioSession.setCategory(AVAudioSessionCategoryRecord)
             try audioSession.setActive(true)
         } catch let error {
             print(error)
@@ -43,7 +42,7 @@ class RecordViewController: UIViewController {
             AVNumberOfChannelsKey: 1
         ]
         
-        recordFileName = String.init(format: "%i.caf", NSDate.init().timeIntervalSince1970)
+        recordFileName = String.init(format: "%li.caf", Int64(NSDate.init().timeIntervalSince1970))
         let recordFileURL = NSURL.init(string: recordFileName!, relativeToURL: documentsPathURL())
         
         recorder?.stop()
@@ -57,7 +56,6 @@ class RecordViewController: UIViewController {
             return
         }
         
-        recorder?.delegate = self
         recorder?.prepareToRecord()
         recorder?.meteringEnabled = true
         
@@ -69,32 +67,46 @@ class RecordViewController: UIViewController {
         }
         
         recorder?.record()
+        playButton.hidden = true
+        recordButton.setTitle("Recording", forState: .Normal)
     }
     
     @IBAction func endRecord() {
         recorder?.stop()
+        recordButton.setTitle("Record", forState: .Normal)
+        playButton.hidden = false
     }
     
     @IBAction func play() {
         if player?.playing == true {
             player?.stop()
-            playButton.selected = false
         } else {
-            let recordFileURL = NSURL.init(string: recordFileName!, relativeToURL: documentsPathURL())
+            let audioSession = AVAudioSession.sharedInstance()
             do {
-                player = try AVAudioPlayer.init(contentsOfURL: recordFileURL!)
+                try audioSession.setCategory(AVAudioSessionCategoryPlayback)
+                try audioSession.setActive(true)
             } catch let error {
                 print(error)
                 return
             }
-            player?.play()
-            playButton.selected = true
+
+            
+            let recordFileURL = NSURL.init(string: recordFileName!, relativeToURL: documentsPathURL())
+            do {
+                player = try AVAudioPlayer.init(contentsOfURL: recordFileURL!)
+                player?.delegate = self
+                player?.play()
+                playButton.setImage(UIImage.init(named: "StopIcon"), forState: .Normal)
+            } catch let error {
+                print(error)
+            }
         }
     }
     
 }
 
-extension RecordViewController: AVAudioRecorderDelegate {
-    
-    
+extension RecordViewController: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        playButton.setImage(UIImage.init(named: "PlayIcon"), forState: .Normal)
+    }
 }
