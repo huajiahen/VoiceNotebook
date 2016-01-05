@@ -42,15 +42,15 @@ class RecordViewController: UIViewController {
             AVNumberOfChannelsKey: 1
         ]
         
-        recordFileName = String.init(format: "%li.caf", Int64(NSDate.init().timeIntervalSince1970))
-        let recordFileURL = NSURL.init(string: recordFileName!, relativeToURL: documentsPathURL())
+        recordFileName = "\(Int64(NSDate().timeIntervalSince1970)).caf"
+        let recordFileURL = NSURL(string: recordFileName!, relativeToURL: documentsPathURL())
         
         recorder?.stop()
         do {
-            recorder = try AVAudioRecorder.init(URL: recordFileURL!, settings: recordSetting)
+            recorder = try AVAudioRecorder(URL: recordFileURL!, settings: recordSetting)
         } catch let error {
-            let alertViewController = UIAlertController.init(title: "Warning", message: "Audio Recorder Error", preferredStyle: .Alert)
-            alertViewController.addAction(UIAlertAction.init(title: "OK", style: .Default, handler: nil))
+            let alertViewController = UIAlertController(title: "Warning", message: "Audio Recorder Error", preferredStyle: .Alert)
+            alertViewController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
             self.presentViewController(alertViewController, animated: true, completion: nil)
             print(error)
             return
@@ -59,9 +59,9 @@ class RecordViewController: UIViewController {
         recorder?.prepareToRecord()
         recorder?.meteringEnabled = true
         
-        if !audioSession.inputAvailable {
-            let alertViewController = UIAlertController.init(title: "Warning", message: "Audio input not available", preferredStyle: .Alert)
-            alertViewController.addAction(UIAlertAction.init(title: "OK", style: .Default, handler: nil))
+        guard audioSession.inputAvailable else {
+            let alertViewController = UIAlertController(title: "Warning", message: "Audio input not available", preferredStyle: .Alert)
+            alertViewController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
             self.presentViewController(alertViewController, animated: true, completion: nil)
             return
         }
@@ -91,12 +91,12 @@ class RecordViewController: UIViewController {
             }
 
             
-            let recordFileURL = NSURL.init(string: recordFileName!, relativeToURL: documentsPathURL())
+            let recordFileURL = NSURL(string: recordFileName!, relativeToURL: documentsPathURL())
             do {
-                player = try AVAudioPlayer.init(contentsOfURL: recordFileURL!)
+                player = try AVAudioPlayer(contentsOfURL: recordFileURL!)
                 player?.delegate = self
                 player?.play()
-                playButton.setImage(UIImage.init(named: "StopIcon"), forState: .Normal)
+                playButton.setImage(UIImage(named: "StopIcon"), forState: .Normal)
             } catch let error {
                 print(error)
             }
@@ -107,6 +107,6 @@ class RecordViewController: UIViewController {
 
 extension RecordViewController: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
-        playButton.setImage(UIImage.init(named: "PlayIcon"), forState: .Normal)
+        playButton.setImage(UIImage(named: "PlayIcon"), forState: .Normal)
     }
 }
